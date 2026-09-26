@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RetrieversPath</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>RetrieversPath</h1>
+      <p>Career planning for college students, built for campus integration.</p>
+    </header>
+
+    <main>
+      <section class="card" aria-labelledby="profile-title">
+        <h2 id="profile-title">Student Profile</h2>
+        <form id="careerForm" novalidate>
+          <div class="field">
+            <label for="studentEmail">Student email</label>
+            <input id="studentEmail" name="studentEmail" type="email" required />
+          </div>
+
+          <div class="field">
+            <label for="allowedDomains">Allowed school domains (comma-separated)</label>
+            <input
+              id="allowedDomains"
+              name="allowedDomains"
+              type="text"
+              value="umbc.edu"
+              aria-describedby="domainHelp"
+            />
+            <small id="domainHelp">Example: umbc.edu, school.edu</small>
+          </div>
+
+          <div class="field">
+            <label for="degreePath">Desired degree path</label>
+            <input id="degreePath" name="degreePath" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="niche">Desired niche</label>
+            <input id="niche" name="niche" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="projects">Desired projects</label>
+            <textarea id="projects" name="projects" rows="3" required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="careerGoal">Ultimate career goal</label>
+            <input id="careerGoal" name="careerGoal" type="text" required />
+          </div>
+
+          <p id="errorMessage" class="error" aria-live="polite"></p>
+          <button type="submit">Build My Career Plan</button>
+        </form>
+      </section>
+
+      <section id="results" class="card hidden" aria-live="polite">
+        <h2>Your Personalized Career Results</h2>
+        <div id="summary"></div>
+        <h3>Tailored Opportunities</h3>
+        <ul id="opportunities"></ul>
+        <h3>Recommended Careers</h3>
+        <ul id="recommendedCareers"></ul>
+        <h3>Career Plan</h3>
+        <ol id="careerPlan"></ol>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
