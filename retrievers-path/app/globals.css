@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --rp-bg: #FBF9F4;      --rp-surface: #FFFFFF;   --rp-surface-2: #F3EFE4;
+  --rp-line: #E6E0D2;    --rp-ink: #1C1B19;       --rp-ink-2: #5C5A54;   --rp-ink-3: #8B887F;
+  --rp-gold: #FDB515;    --rp-gold-soft: #F6C85F; --rp-gold-tint: #FBE9BD; --rp-gold-deep: #A67A05;
+  --rp-teal: #2E8C90;    --rp-teal-tint: #D9EEEE;
+  --rp-mint: #3CA37A;    --rp-mint-tint: #DDF2E8;
+  --rp-coral: #E45B5B;   --rp-coral-tint: #FBE1E1;
+}
+.dark {
+  --rp-bg: #111214;      --rp-surface: #1A1B1E;   --rp-surface-2: #222327;
+  --rp-line: #2E2F34;    --rp-ink: #F2EFE7;       --rp-ink-2: #B6B2A6;   --rp-ink-3: #7E7B72;
+  --rp-gold: #FDB515;    --rp-gold-soft: #F7C64B; --rp-gold-tint: #3A2F12; --rp-gold-deep: #E3B24A;
+  --rp-teal: #4FB3B7;    --rp-teal-tint: #15353A;
+  --rp-mint: #5BC495;    --rp-mint-tint: #16332A;
+  --rp-coral: #F07272;   --rp-coral-tint: #3A1C1C;
+}
+[data-contrast="high"] {
+  --rp-bg: #FFFFFF; --rp-surface: #FFFFFF; --rp-surface-2: #F2F2F2; --rp-line: #4A4A4A;
+  --rp-ink: #000000; --rp-ink-2: #1F1F1F; --rp-ink-3: #3D3D3D;
+  --rp-gold-deep: #6B4E00; --rp-teal: #0B4F53; --rp-mint: #0F5E3B;
+}
+
+/* Easier-to-read mode: AccessibilityPanel adds .font-dys to <body>. This beats the
+   body's own font-sans class and any font-display/font-mono used inside the page. */
+body.font-dys, body.font-dys * { font-family: var(--font-atkinson), sans-serif !important; }
+
+*:focus-visible { outline: 2px solid var(--rp-teal); outline-offset: 3px; }
+
+.glass {
+  background: color-mix(in srgb, var(--rp-surface) 62%, transparent);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid color-mix(in srgb, var(--rp-surface) 80%, transparent);
+  box-shadow: 0 8px 32px rgba(28,27,25,.10);
+  border-radius: 18px;
+}
+@supports not (backdrop-filter: blur(1px)) { .glass { background: var(--rp-surface); } }
+@media (prefers-reduced-transparency: reduce) { .glass { background: var(--rp-surface); backdrop-filter: none; -webkit-backdrop-filter: none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

@@ -1,0 +1,16 @@
+# dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# env files (keep secrets out of git)
+.env*.local
+.env
+
+# OS / editor
+.DS_Store
+*.log
