@@ -47,17 +47,44 @@ function StartForm() {
     router.push("/roadmap");
   }
 
-  return (
-    <section className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
-      <p className="text-sm font-semibold text-ink-3 mb-2">Step {step + 1} of 3</p>
-      <div className="h-2 rounded-full bg-surface-2 mb-8" role="progressbar" aria-label="Setup progress" aria-valuenow={step + 1} aria-valuemin={1} aria-valuemax={3}>
-        <div className="h-2 rounded-full bg-gold transition-all" style={{ width: `${((step + 1) / 3) * 100}%` }} />
-      </div>
+  const answers = [major, year, paths.find((p) => p.slug === slug)?.role ?? ""];
+  const stepNames = ["Major", "Year", "Career"];
 
-      <form onSubmit={next} className="grid gap-6">
-        <fieldset className="grid gap-3">
+  // Desktop-first: step tracker on the left, question on the right. Stacks on phones.
+  return (
+    <section className="mx-auto max-w-6xl px-4 py-10 lg:py-16 grid gap-8 lg:grid-cols-[300px_1fr] lg:gap-14 lg:items-start">
+      <aside className="grid gap-5 lg:sticky lg:top-28">
+        <div className="grid gap-2">
+          <p className="text-sm font-semibold text-ink-3">Step {step + 1} of 3</p>
+          <div className="h-2 rounded-full bg-surface-2" role="progressbar" aria-label="Setup progress" aria-valuenow={step + 1} aria-valuemin={1} aria-valuemax={3}>
+            <div className="h-2 rounded-full bg-gold transition-all" style={{ width: `${((step + 1) / 3) * 100}%` }} />
+          </div>
+        </div>
+        {/* Step list with the answers so far: desktop only, phones use the bar above */}
+        <ol className="hidden lg:grid gap-2" aria-label="Setup steps">
+          {stepNames.map((name, i) => {
+            const state = i < step ? "done" : i === step ? "current" : "todo";
+            return (
+              <li key={name} aria-current={state === "current" ? "step" : undefined}
+                className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${state === "current" ? "border-teal bg-surface" : "border-line"}`}>
+                <span aria-hidden="true" className={`grid place-items-center w-7 h-7 rounded-full text-sm font-bold shrink-0 ${state === "done" ? "bg-mint text-white" : state === "current" ? "bg-gold text-on-gold" : "bg-surface-2 text-ink-3"}`}>
+                  {state === "done" ? "✓" : i + 1}
+                </span>
+                <span className="grid min-w-0">
+                  <span className="font-semibold">{name}</span>
+                  <span className="text-sm text-ink-3 truncate">{answers[i] || (state === "todo" ? "Not yet" : "Choose one")}</span>
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+        <p className="hidden lg:block text-sm text-ink-3">Takes about two minutes. You can change your answers anytime with Start over.</p>
+      </aside>
+
+      <form onSubmit={next} className="grid gap-6 min-w-0">
+        <fieldset className="grid gap-3 sm:grid-cols-2">
           <legend className="contents">
-            <h1 ref={heading} tabIndex={-1} className="font-display text-3xl sm:text-4xl font-bold mb-3 outline-none">{stepTitles[step]}</h1>
+            <h1 ref={heading} tabIndex={-1} className="sm:col-span-2 font-display text-3xl lg:text-4xl font-bold mb-3 outline-none">{stepTitles[step]}</h1>
           </legend>
 
           {step === 0 && majors.map((m) => (
@@ -73,7 +100,7 @@ function StartForm() {
           ))}
         </fieldset>
 
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 border-t border-line pt-6">
           <button type="button" onClick={() => setStep(step - 1)} disabled={step === 0}
             className="rounded-full px-5 py-2.5 font-semibold text-teal hover:bg-teal-tint disabled:invisible">
             ← Back

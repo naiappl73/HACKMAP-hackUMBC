@@ -32,6 +32,12 @@ Stop the server with `Ctrl+C`. Before pushing, run `npm run lint` and `npm run b
 
 Fonts are bundled with the app (no Google download), so it runs even on blocked or offline networks.
 
+### Layout: desktop first
+RetrieversPath is designed for **desktop** first (1280px and wider), then adapts down to phones.
+Tailwind classes without a prefix apply to every size; use `lg:` (1024px+) and `xl:` (1280px+) for the desktop layout,
+e.g. `grid gap-6 lg:grid-cols-[340px_1fr]` = one column on phones, sidebar + main column on desktop.
+Pages with sidebars: `/start`, `/roadmap`, `/paths/[slug]`.
+
 ### Where things go
 | Path | What it is |
 |------|------------|
