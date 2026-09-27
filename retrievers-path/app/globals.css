@@ -96,9 +96,11 @@
 /* ================= Motion ================= */
 :root { --spring: cubic-bezier(.34, 1.56, .64, 1); --ease-out: cubic-bezier(.16, 1, .3, 1); }
 
-/* Page enter (app/template.tsx wraps every page). */
-.page-enter { animation: page-in .55s var(--ease-out) both; }
-@keyframes page-in { from { opacity: 0; transform: translateY(14px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+/* Page enter (app/template.tsx wraps every page). Kept short and blur-free: animating
+   filter on a wrapper full of backdrop-filter glass re-renders every panel each frame,
+   which made clicks between pages feel slow. */
+.page-enter { animation: page-in .18s ease-out both; }
+@keyframes page-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
 /* Children rise in one after another. Put .stagger on a list/grid. */
 .stagger > * { animation: rise .6s var(--ease-out) both; }
