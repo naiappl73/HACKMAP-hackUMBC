@@ -1,4 +1,5 @@
 import "./globals.css";
+import SiteHeader from "@/components/SiteHeader";
 import { Sora, Manrope, JetBrains_Mono, Atkinson_Hyperlegible } from "next/font/google";
 
 const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
@@ -10,9 +11,10 @@ export const metadata = { title: "RetrieversPath", description: "Career roadmaps
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body className={`${sora.variable} ${manrope.variable} ${mono.variable} ${atkinson.variable} bg-bg text-ink font-sans`}>
-        <a href="#main" className="sr-only focus:not-sr-only">Skip to content</a>
+        <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-surface focus:px-4 focus:py-2 focus:rounded-full">Skip to content</a>
+        <SiteHeader />
         <main id="main">{children}</main>
       </body>
     </html>

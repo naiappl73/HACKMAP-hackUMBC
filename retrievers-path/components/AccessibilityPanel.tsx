@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 
-// Starter accessibility panel. Wire the switches to <html data-*> attributes;
-// globals.css already styles [data-contrast="high"].
+// Accessibility panel. Switches set <html data-*> attributes / classes;
+// globals.css styles [data-contrast="high"], .dark and body.font-dys.
 export default function AccessibilityPanel() {
   const [reading, setReading] = useState(false);
 
@@ -29,10 +29,13 @@ export default function AccessibilityPanel() {
       <label className="flex justify-between items-center gap-3">High contrast
         <input type="checkbox" onChange={(e) => setAttr("data-contrast", e.target.checked ? "high" : null)} />
       </label>
+      <label className="flex justify-between items-center gap-3">Dark mode
+        <input type="checkbox" onChange={(e) => document.documentElement.classList.toggle("dark", e.target.checked)} />
+      </label>
       <label className="flex justify-between items-center gap-3">Easier-to-read font
         <input type="checkbox" onChange={(e) => document.body.classList.toggle("font-dys", e.target.checked)} />
       </label>
-      <button type="button" onClick={readAloud} className="bg-gold text-ink rounded-full px-4 py-2 font-bold w-max">
+      <button type="button" onClick={readAloud} className="bg-teal-tint text-teal rounded-full px-4 py-2 font-bold w-max">
         {reading ? "Stop reading" : "Read this page aloud"}
       </button>
     </div>
