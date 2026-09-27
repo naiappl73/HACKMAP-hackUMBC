@@ -7,7 +7,8 @@ import "@fontsource/atkinson-hyperlegible/400.css";
 import "@fontsource/atkinson-hyperlegible/700.css";
 import type { Metadata, Viewport } from "next";
 import SiteHeader from "@/components/SiteHeader";
-import { A11Y_INIT_SCRIPT } from "@/lib/a11y";
+import { A11Y_INIT_SCRIPT } from "@/lib/a11y-script";
+import LiquidBackground from "@/components/LiquidBackground";
 
 export const metadata: Metadata = {
   title: "RetrieversPath",
@@ -30,9 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-bg text-ink font-sans antialiased">
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-surface focus:px-4 focus:py-2 focus:rounded-full">Skip to content</a>
+        <LiquidBackground />
         <SiteHeader />
         <main id="main" className="min-h-[70vh]">{children}</main>
-        <footer className="border-t border-line">
+        <footer className="border-t border-line relative">
           <div className="mx-auto max-w-6xl px-4 py-8 flex flex-wrap justify-between gap-4 text-sm text-ink-3">
             <p>RetrieversPath · Built at hackUMBC 2026</p>
             <p>Anaiah, Martin &amp; Paul</p>

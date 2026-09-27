@@ -20,12 +20,37 @@ npm run dev      # then open http://localhost:3000
 
 Stop the server with `Ctrl+C`. Before pushing, run `npm run lint` and `npm run build`.
 
+### Turn on AI plans and live job data (optional)
+The app works without any keys (it uses a built-in offline planner). To turn on the extras:
+
+1. In `retrievers-path/`, copy `.env.example` to `.env.local`.
+2. Add `ANTHROPIC_API_KEY` for **AI-personalized plans** (Claude). Plans take about 20–60 seconds to generate.
+3. Add `USAJOBS_API_KEY` and `USAJOBS_EMAIL` for **live federal job postings** ([free key](https://developer.usajobs.gov/APIRequest/Index)).
+4. Restart `npm run dev`.
+
+Never commit `.env.local`; it's in `.gitignore`.
+
+### What's in the app
+| Page | What it does |
+|------|--------------|
+| `/` | Landing page |
+| `/paths` | Browse ~70 UMBC programs; filter by area (STEM, Arts & Humanities, Social & Behavioral Sciences, Health & Human Services, Business, Education) and degree level |
+| `/paths/[id]` | One program: careers, skills, focus ideas, related programs |
+| `/start` | 5-step setup: program(s), minors & focus areas, career goal, year & experience, review |
+| `/roadmap` | Dashboard: current year first, filters by type, add/remove your own items, live USAJOBS postings |
+| `/settings` | Light / Dark / Auto theme, contrast, easy-read font, reduce motion, delete plan data |
+| `/api/plan` | Builds a plan with Claude (falls back to the offline planner) |
+| `/api/jobs` | USAJOBS search proxy |
+
+Program data lives in `lib/programs.ts`; the offline planner is in `lib/plan.ts`. The program list was compiled for this prototype. **Verify names and requirements against the UMBC catalog (catalog.umbc.edu) before launch.**
+
 ### If something goes wrong
 | Problem | Fix |
 |---------|-----|
 | `Could not read package.json` | Pull the latest `main`; `npm run dev` now works from the repo root too. |
 | `next: command not found` / `Cannot find module` | Run `npm install` again (needed after every pull that changes `package.json`). |
 | `Port 3000 is in use` | Another dev server is running. Stop it with `Ctrl+C`, or Next will offer port 3001. |
+| Pages take minutes to load | `npm run dev` now uses Turbopack (much faster). Also check `node -p process.arch` prints `arm64` on Apple-chip Macs, and keep the project out of an iCloud-synced folder. |
 | Page looks unstyled or stale | Stop the server, delete the `retrievers-path/.next` folder, run `npm run dev` again. |
 | Round **N** button in the bottom-left corner | That's the Next.js dev tools. It only appears in `npm run dev`, not in the real site. |
 | Old Node version errors | Install Node 20 LTS from nodejs.org (or `nvm use`, the repo has an `.nvmrc`). |
@@ -42,13 +67,14 @@ Pages with sidebars: `/start`, `/roadmap`, `/paths/[slug]`.
 | Path | What it is |
 |------|------------|
 | `app/page.tsx` | Home / landing page (`/`) |
-| `app/start/page.tsx` | 3-question setup: major, year, career (`/start`) |
-| `app/roadmap/page.tsx` | Student's roadmap with checklist + progress (`/roadmap`) |
-| `app/paths/page.tsx` | All career paths with major filter (`/paths`) |
-| `app/paths/[slug]/page.tsx` | One career's details and 4-year plan (`/paths/software-engineer`, ...) |
-| `lib/paths.ts` | **All career content.** Edit here to change every page at once |
-| `lib/storage.ts` | Saves choices + checkmarks in the browser (no backend yet) |
-| `lib/a11y.ts` | Saves Accessibility settings (dark mode, contrast, font) in the browser |
+| `app/start/page.tsx` | 5-step setup wizard (`/start`) |
+| `app/roadmap/page.tsx` | Student dashboard (`/roadmap`) |
+| `app/paths/page.tsx` | Program browser (`/paths`) |
+| `app/paths/[slug]/page.tsx` | One program's page (`/paths/cs-bs`, ...) |
+| `lib/programs.ts` | **All UMBC programs, minors, and focus areas.** Edit here to change every page |
+| `lib/plan.ts` | Plan format + the offline planner |
+| `lib/storage.ts` | Saves profile, plan, checkmarks, added/removed items in the browser (no backend yet) |
+| `lib/a11y.ts` | Theme + accessibility settings (saved in the browser) |
 | `app/layout.tsx` | Wraps every page: fonts + skip-to-content link |
 | `app/globals.css` | Color tokens (light / dark / high contrast), `.glass` style |
 | `components/` | Reusable pieces, e.g. `AccessibilityPanel.tsx` |

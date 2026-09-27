@@ -35,17 +35,135 @@
 
 *:focus-visible { outline: 2px solid var(--rp-teal); outline-offset: 3px; }
 
+/* ================= Liquid glass ================= */
+/* Frosted panel with a soft specular highlight along the top edge. */
 .glass {
-  background: color-mix(in srgb, var(--rp-surface) 62%, transparent);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid color-mix(in srgb, var(--rp-surface) 80%, transparent);
-  box-shadow: 0 8px 32px rgba(28,27,25,.10);
+  position: relative;
+  background: color-mix(in srgb, var(--rp-surface) 58%, transparent);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid color-mix(in srgb, var(--rp-surface) 75%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 55%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--rp-ink) 4%, transparent),
+    0 10px 36px rgba(28,27,25,.10);
   border-radius: 18px;
 }
-@supports not (backdrop-filter: blur(1px)) { .glass { background: var(--rp-surface); } }
-@media (prefers-reduced-transparency: reduce) { .glass { background: var(--rp-surface); backdrop-filter: none; -webkit-backdrop-filter: none; } }
+.glass::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(135deg, color-mix(in srgb, white 35%, transparent) 0%, transparent 38%, transparent 70%, color-mix(in srgb, white 12%, transparent) 100%);
+  mix-blend-mode: soft-light;
+}
+.dark .glass { box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 36px rgba(0,0,0,.45); }
+.glass-strong { background: color-mix(in srgb, var(--rp-surface) 78%, transparent); }
+/* Cards: glass that lifts and catches light on hover. */
+.glass-card {
+  position: relative; overflow: hidden;
+  background: color-mix(in srgb, var(--rp-surface) 72%, transparent);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid var(--rp-line);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 45%, transparent), 0 1px 2px rgba(28,27,25,.05), 0 8px 24px rgba(28,27,25,.06);
+  border-radius: 20px;
+  transition: transform .35s var(--spring), box-shadow .35s ease, border-color .2s ease;
+}
+.glass-card::after {
+  content: ""; position: absolute; inset: -40% auto -40% -60%; width: 40%; pointer-events: none;
+  background: linear-gradient(100deg, transparent, color-mix(in srgb, white 28%, transparent), transparent);
+  transform: translateX(-120%) skewX(-12deg); transition: transform .8s ease;
+}
+.glass-card.interactive:hover { transform: translateY(-4px); box-shadow: inset 0 1px 0 color-mix(in srgb, white 45%, transparent), 0 18px 40px rgba(28,27,25,.12); border-color: color-mix(in srgb, var(--rp-teal) 45%, var(--rp-line)); }
+.glass-card.interactive:hover::after { transform: translateX(420%) skewX(-12deg); }
+.dark .glass-card { box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 24px rgba(0,0,0,.35); }
+@supports not (backdrop-filter: blur(1px)) { .glass, .glass-card { background: var(--rp-surface); } }
+@media (prefers-reduced-transparency: reduce) {
+  .glass, .glass-card { background: var(--rp-surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+[data-contrast="high"] .glass, [data-contrast="high"] .glass-card { background: var(--rp-surface); backdrop-filter: none; border-color: var(--rp-line); }
+
+/* Drifting color blobs behind everything; the glass blurs them. */
+.liquid-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.blob { position: absolute; width: 46vmax; height: 46vmax; border-radius: 50%; filter: blur(70px); opacity: .32; will-change: transform; }
+.blob-gold { background: var(--rp-gold); top: -18vmax; right: -12vmax; animation: drift-a 26s ease-in-out infinite alternate; }
+.blob-teal { background: var(--rp-teal); bottom: -22vmax; left: -14vmax; opacity: .22; animation: drift-b 32s ease-in-out infinite alternate; }
+.blob-mint { background: var(--rp-mint); top: 40%; left: 45%; width: 30vmax; height: 30vmax; opacity: .14; animation: drift-c 38s ease-in-out infinite alternate; }
+.dark .blob { opacity: .16; }
+[data-contrast="high"] .liquid-bg { display: none; }
+@keyframes drift-a { to { transform: translate(-10vmax, 12vmax) scale(1.12); } }
+@keyframes drift-b { to { transform: translate(12vmax, -8vmax) scale(.9); } }
+@keyframes drift-c { to { transform: translate(-16vmax, -10vmax) scale(1.2); } }
+
+/* ================= Motion ================= */
+:root { --spring: cubic-bezier(.34, 1.56, .64, 1); --ease-out: cubic-bezier(.16, 1, .3, 1); }
+
+/* Page enter (app/template.tsx wraps every page). */
+.page-enter { animation: page-in .55s var(--ease-out) both; }
+@keyframes page-in { from { opacity: 0; transform: translateY(14px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+
+/* Children rise in one after another. Put .stagger on a list/grid. */
+.stagger > * { animation: rise .6s var(--ease-out) both; }
+.stagger > *:nth-child(1) { animation-delay: .04s; } .stagger > *:nth-child(2) { animation-delay: .09s; }
+.stagger > *:nth-child(3) { animation-delay: .14s; } .stagger > *:nth-child(4) { animation-delay: .19s; }
+.stagger > *:nth-child(5) { animation-delay: .24s; } .stagger > *:nth-child(6) { animation-delay: .29s; }
+.stagger > *:nth-child(7) { animation-delay: .34s; } .stagger > *:nth-child(8) { animation-delay: .39s; }
+.stagger > *:nth-child(n+9) { animation-delay: .44s; }
+.rise { animation: rise .6s var(--ease-out) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: none; } }
+.pop { animation: pop .45s var(--spring) both; }
+@keyframes pop { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+
+/* Springy press feedback for buttons and links. */
+.press { transition: transform .25s var(--spring), background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+.press:hover { transform: translateY(-1px); }
+.press:active { transform: scale(.96); }
+
+.lift { transition: transform .3s var(--spring), box-shadow .2s ease, border-color .2s ease; }
+.lift:hover { transform: translateY(-3px); }
+
+/* Nav pill: glassy highlight on the current page. */
+.nav-pill { display: inline-block; transition: background-color .3s ease, color .2s ease, box-shadow .3s ease; }
+.nav-pill.is-active { background: color-mix(in srgb, var(--rp-surface) 85%, transparent); box-shadow: inset 0 1px 0 color-mix(in srgb, white 50%, transparent), 0 2px 10px rgba(28,27,25,.08); }
+.logo-orb { transition: transform .5s var(--spring); }
+a:hover > .logo-orb { transform: rotate(-12deg) scale(1.08); }
+.gear { transition: transform .6s var(--spring); }
+a:hover > .gear { transform: rotate(90deg); }
+
+/* Segmented control thumb (theme switcher, filters). */
+.segmented-thumb {
+  position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc((100% - 8px) / 3); border-radius: 999px;
+  background: var(--rp-surface); box-shadow: 0 2px 8px rgba(28,27,25,.12), inset 0 1px 0 color-mix(in srgb, white 60%, transparent);
+  transition: transform .45s var(--spring);
+}
+
+/* iOS-style switch built on a real checkbox. */
+.switch { appearance: none; width: 40px; height: 24px; border-radius: 999px; background: var(--rp-line); position: relative; cursor: pointer; flex-shrink: 0; transition: background-color .25s ease; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: white; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .35s var(--spring); }
+.switch:checked { background: var(--rp-teal); }
+.switch:checked::after { transform: translateX(16px); }
+
+.popover:not([hidden]) { animation: pop .35s var(--spring) both; transform-origin: top right; }
+
+/* Progress bars fill smoothly. */
+.bar-fill { transition: width .8s var(--ease-out); }
+
+/* Checkbox tick bounce. */
+.tick:checked { animation: pop .35s var(--spring); }
+
+/* Liquid orb shown while the plan builds. */
+.building-orb { position: relative; width: 120px; height: 120px; filter: blur(.5px); }
+.building-orb span { position: absolute; inset: 0; border-radius: 42% 58% 55% 45% / 45% 40% 60% 55%; mix-blend-mode: multiply; animation: morph 6s ease-in-out infinite; }
+.building-orb span:nth-child(1) { background: var(--rp-gold); opacity: .85; }
+.building-orb span:nth-child(2) { background: var(--rp-teal); opacity: .6; animation-duration: 7.5s; animation-direction: reverse; }
+.building-orb span:nth-child(3) { background: var(--rp-mint); opacity: .5; animation-duration: 9s; }
+.dark .building-orb span { mix-blend-mode: screen; }
+@keyframes morph {
+  0%, 100% { border-radius: 42% 58% 55% 45% / 45% 40% 60% 55%; transform: rotate(0deg) scale(1); }
+  50% { border-radius: 58% 42% 40% 60% / 60% 55% 45% 40%; transform: rotate(180deg) scale(1.08); }
+}
+
+/* Everything above turns off for reduced-motion users (system setting or our toggle). */
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+[data-motion="reduced"] *, [data-motion="reduced"] *::before, [data-motion="reduced"] *::after { animation: none !important; transition: none !important; }
 
 /* Soft gold/teal light behind the landing hero. Purely decorative. */
 .hero-glow { position: relative; isolation: isolate; }
@@ -57,7 +175,3 @@
 }
 [data-contrast="high"] .hero-glow::before { display: none; }
 .dark .hero-glow::before { opacity: .55; }
-
-/* Gentle lift on hoverable cards (turned off by the reduced-motion rule above). */
-.lift { transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
-.lift:hover { transform: translateY(-2px); }
