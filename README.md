@@ -14,12 +14,21 @@ npm install      # first time only, takes 1-3 min
 npm run dev      # then open http://localhost:3000
 ```
 
+**See it on your phone or a teammate's laptop** (same Wi-Fi): run `npm run dev:host`, then open
+`http://<your-laptop-IP>:3000` on the other device. On a Mac, find your IP with `ipconfig getifaddr en0`.
+
 Stop the server with `Ctrl+C`. Before pushing, run `npm run lint` and `npm run build`.
 
 ### Where things go
 | Path | What it is |
 |------|------------|
-| `app/page.tsx` | Home page |
+| `app/page.tsx` | Home / landing page (`/`) |
+| `app/start/page.tsx` | 3-question setup: major, year, career (`/start`) |
+| `app/roadmap/page.tsx` | Student's roadmap with checklist + progress (`/roadmap`) |
+| `app/paths/page.tsx` | All career paths with major filter (`/paths`) |
+| `app/paths/[slug]/page.tsx` | One career's details and 4-year plan (`/paths/software-engineer`, ...) |
+| `lib/paths.ts` | **All career content.** Edit here to change every page at once |
+| `lib/storage.ts` | Saves choices + checkmarks in the browser (no backend yet) |
 | `app/layout.tsx` | Wraps every page: fonts + skip-to-content link |
 | `app/globals.css` | Color tokens (light / dark / high contrast), `.glass` style |
 | `components/` | Reusable pieces, e.g. `AccessibilityPanel.tsx` |

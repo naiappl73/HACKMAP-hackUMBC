@@ -1,4 +1,7 @@
+import Link from "next/link";
+import PathCard from "@/components/PathCard";
 import RoadmapPreview from "@/components/RoadmapPreview";
+import { paths } from "@/lib/paths";
 
 const steps = [
   { n: "1", title: "Tell us where you are", body: "Pick your major, your year, and the careers you're curious about. No résumé needed." },
@@ -11,13 +14,6 @@ const features = [
   { title: "One step at a time", body: "Each semester shows a short list of next steps, so the plan never feels like too much.", tint: "bg-teal-tint text-teal", icon: "🧭" },
   { title: "See your progress", body: "A clear progress bar and checklist show how far you've come.", tint: "bg-mint-tint text-mint", icon: "✅" },
   { title: "Accessible by default", body: "High contrast, dark mode, an easier-to-read font, and read-aloud are one click away.", tint: "bg-coral-tint text-coral", icon: "♿" },
-];
-
-const paths = [
-  { role: "Software Engineer", major: "Computer Science", skills: ["Data structures", "Git", "Internships"] },
-  { role: "Data Scientist", major: "Information Systems", skills: ["Python", "Statistics", "SQL"] },
-  { role: "Biomedical Researcher", major: "Biological Sciences", skills: ["Lab methods", "Research", "Data analysis"] },
-  { role: "ML Engineer", major: "Computer Engineering", skills: ["Linear algebra", "Machine learning", "Python"] },
 ];
 
 export default function Home() {
@@ -35,9 +31,9 @@ export default function Home() {
             experiences that get you to the job you want.
           </p>
           <div className="flex flex-wrap items-center gap-3">
-            <a href="/start" className="bg-gold text-ink rounded-full px-6 py-3 font-bold hover:bg-gold-soft">
+            <Link href="/start" className="bg-gold text-ink rounded-full px-6 py-3 font-bold hover:bg-gold-soft">
               Build my roadmap
-            </a>
+            </Link>
             <a href="#how" className="rounded-full px-6 py-3 font-semibold text-teal hover:bg-teal-tint">
               See how it works
             </a>
@@ -84,18 +80,9 @@ export default function Home() {
           <h2 id="paths-title" className="font-display text-3xl font-bold mb-3">Explore career paths</h2>
           <p className="text-ink-2 mb-10 max-w-2xl">A few of the roadmaps you can start from. Each one is a starting point you can change.</p>
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {paths.map((p) => (
-              <li key={p.role} className="bg-surface border border-line rounded-2xl p-5 grid gap-3 content-start">
-                <p className="text-sm text-ink-3 font-medium">{p.major}</p>
-                <h3 className="font-display text-lg font-semibold">{p.role}</h3>
-                <ul className="flex flex-wrap gap-2" aria-label={`Key skills for ${p.role}`}>
-                  {p.skills.map((s) => (
-                    <li key={s} className="rounded-full bg-teal-tint text-teal text-xs font-bold px-2.5 py-1">{s}</li>
-                  ))}
-                </ul>
-              </li>
-            ))}
+            {paths.map((p) => <li key={p.slug}><PathCard path={p} /></li>)}
           </ul>
+          <Link href="/paths" className="inline-block mt-8 font-semibold text-teal hover:underline">See all career paths →</Link>
         </div>
       </section>
 
@@ -106,18 +93,11 @@ export default function Home() {
             Ready to see your path?
           </h2>
           <p className="text-lg opacity-80 max-w-xl">It takes about two minutes to build your first roadmap.</p>
-          <a href="/start" className="bg-gold text-ink rounded-full px-6 py-3 font-bold hover:bg-gold-soft">
+          <Link href="/start" className="bg-gold text-ink rounded-full px-6 py-3 font-bold hover:bg-gold-soft">
             Get started
-          </a>
+          </Link>
         </div>
       </section>
-
-      <footer className="border-t border-line">
-        <div className="mx-auto max-w-6xl px-4 py-8 flex flex-wrap justify-between gap-4 text-sm text-ink-3">
-          <p>RetrieversPath · Built at hackUMBC 2026</p>
-          <p>Anaiah, Martin &amp; Paul</p>
-        </div>
-      </footer>
     </div>
   );
 }
