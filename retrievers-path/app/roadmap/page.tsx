@@ -7,7 +7,15 @@ export default function Roadmap() {
   const { profile, ready, clear } = useProfile();
   const { done, toggle } = useDone();
 
-  if (!ready) return <div className="min-h-[60vh]" aria-busy="true" />;
+  if (!ready) {
+    return (
+      <div className="mx-auto max-w-4xl px-4 py-10 sm:py-14 grid gap-6 animate-pulse" aria-busy="true" aria-label="Loading your roadmap">
+        <div className="h-10 w-2/3 rounded-xl bg-surface-2" />
+        <div className="h-40 rounded-2xl bg-surface-2" />
+        <div className="h-56 rounded-2xl bg-surface-2" />
+      </div>
+    );
+  }
 
   const path = profile && getPath(profile.slug);
   if (!profile || !path) {
@@ -16,7 +24,7 @@ export default function Roadmap() {
         <p className="rounded-full bg-gold-tint text-gold-deep text-sm font-bold px-3 py-1">No roadmap yet</p>
         <h1 className="font-display text-4xl font-bold">Let&apos;s build your roadmap</h1>
         <p className="text-lg text-ink-2">Answer three quick questions and we&apos;ll lay out your plan, semester by semester.</p>
-        <Link href="/start" className="bg-gold text-ink rounded-full px-6 py-3 font-bold hover:bg-gold-soft">Get started</Link>
+        <Link href="/start" className="bg-gold text-on-gold rounded-full px-6 py-3 font-bold hover:bg-gold-soft">Get started</Link>
       </section>
     );
   }

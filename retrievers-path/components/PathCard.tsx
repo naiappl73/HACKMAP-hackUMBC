@@ -5,7 +5,7 @@ import type { CareerPath } from "@/lib/paths";
 export default function PathCard({ path }: { path: CareerPath }) {
   return (
     <Link href={`/paths/${path.slug}`}
-      className="group h-full bg-surface border border-line rounded-2xl p-5 grid gap-3 content-start hover:border-teal hover:shadow-card transition">
+      className="group h-full bg-surface border border-line rounded-2xl p-5 grid gap-3 content-start hover:border-teal hover:shadow-card lift">
       <p className="text-sm text-ink-3 font-medium">{path.major}</p>
       <h3 className="font-display text-lg font-semibold group-hover:text-teal">{path.role}</h3>
       <ul className="flex flex-wrap gap-2" aria-label={`Key skills for ${path.role}`}>

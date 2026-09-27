@@ -79,7 +79,7 @@ function StartForm() {
             ← Back
           </button>
           <button type="submit" disabled={!canNext}
-            className="bg-gold text-ink rounded-full px-6 py-3 font-bold hover:bg-gold-soft disabled:opacity-40 disabled:cursor-not-allowed">
+            className="bg-gold text-on-gold rounded-full px-6 py-3 font-bold hover:bg-gold-soft disabled:opacity-40 disabled:cursor-not-allowed">
             {step < 2 ? "Next" : "Build my roadmap"}
           </button>
         </div>

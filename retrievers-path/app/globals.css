@@ -3,14 +3,19 @@
 @tailwind utilities;
 
 :root {
+  --font-sora: "Sora Variable";   --font-manrope: "Manrope Variable";
+  --font-mono: "JetBrains Mono Variable";   --font-atkinson: "Atkinson Hyperlegible";
+  color-scheme: light;
   --rp-bg: #FBF9F4;      --rp-surface: #FFFFFF;   --rp-surface-2: #F3EFE4;
   --rp-line: #E6E0D2;    --rp-ink: #1C1B19;       --rp-ink-2: #5C5A54;   --rp-ink-3: #8B887F;
-  --rp-gold: #FDB515;    --rp-gold-soft: #F6C85F; --rp-gold-tint: #FBE9BD; --rp-gold-deep: #A67A05;
+  --rp-gold: #FDB515;    --rp-gold-soft: #F6C85F;  --rp-on-gold: #1C1B19; /* text on gold: dark in every mode */
+   --rp-gold-tint: #FBE9BD; --rp-gold-deep: #A67A05;
   --rp-teal: #2E8C90;    --rp-teal-tint: #D9EEEE;
   --rp-mint: #3CA37A;    --rp-mint-tint: #DDF2E8;
   --rp-coral: #E45B5B;   --rp-coral-tint: #FBE1E1;
 }
 .dark {
+  color-scheme: dark;
   --rp-bg: #111214;      --rp-surface: #1A1B1E;   --rp-surface-2: #222327;
   --rp-line: #2E2F34;    --rp-ink: #F2EFE7;       --rp-ink-2: #B6B2A6;   --rp-ink-3: #7E7B72;
   --rp-gold: #FDB515;    --rp-gold-soft: #F7C64B; --rp-gold-tint: #3A2F12; --rp-gold-deep: #E3B24A;
@@ -24,9 +29,9 @@
   --rp-gold-deep: #6B4E00; --rp-teal: #0B4F53; --rp-mint: #0F5E3B;
 }
 
-/* Easier-to-read mode: AccessibilityPanel adds .font-dys to <body>. This beats the
+/* Easier-to-read mode: the Accessibility panel sets data-font="dys" on <html>. This beats the
    body's own font-sans class and any font-display/font-mono used inside the page. */
-body.font-dys, body.font-dys * { font-family: var(--font-atkinson), sans-serif !important; }
+[data-font="dys"] body, [data-font="dys"] body * { font-family: var(--font-atkinson), sans-serif !important; }
 
 *:focus-visible { outline: 2px solid var(--rp-teal); outline-offset: 3px; }
 
@@ -41,3 +46,18 @@ body.font-dys, body.font-dys * { font-family: var(--font-atkinson), sans-serif !
 @supports not (backdrop-filter: blur(1px)) { .glass { background: var(--rp-surface); } }
 @media (prefers-reduced-transparency: reduce) { .glass { background: var(--rp-surface); backdrop-filter: none; -webkit-backdrop-filter: none; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* Soft gold/teal light behind the landing hero. Purely decorative. */
+.hero-glow { position: relative; isolation: isolate; }
+.hero-glow::before {
+  content: ""; position: absolute; inset: -10% -20% auto; height: 110%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(40% 50% at 75% 40%, color-mix(in srgb, var(--rp-gold) 22%, transparent), transparent 70%),
+    radial-gradient(35% 45% at 20% 20%, color-mix(in srgb, var(--rp-teal) 12%, transparent), transparent 70%);
+}
+[data-contrast="high"] .hero-glow::before { display: none; }
+.dark .hero-glow::before { opacity: .55; }
+
+/* Gentle lift on hoverable cards (turned off by the reduced-motion rule above). */
+.lift { transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+.lift:hover { transform: translateY(-2px); }

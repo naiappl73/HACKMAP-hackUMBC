@@ -10,6 +10,7 @@ export default {
         surface: { DEFAULT: "var(--rp-surface)", 2: "var(--rp-surface-2)" },
         line: "var(--rp-line)",
         ink: { DEFAULT: "var(--rp-ink)", 2: "var(--rp-ink-2)", 3: "var(--rp-ink-3)" },
+        "on-gold": "var(--rp-on-gold)",
         gold: { DEFAULT: "var(--rp-gold)", soft: "var(--rp-gold-soft)", tint: "var(--rp-gold-tint)", deep: "var(--rp-gold-deep)" },
         teal: { DEFAULT: "var(--rp-teal)", tint: "var(--rp-teal-tint)" },
         mint: { DEFAULT: "var(--rp-mint)", tint: "var(--rp-mint-tint)" },

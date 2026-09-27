@@ -1,10 +1,33 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { applyPrefs, currentPrefs, savePrefs, type A11yPrefs } from "@/lib/a11y";
 
-// Accessibility panel. Switches set <html data-*> attributes / classes;
-// globals.css styles [data-contrast="high"], .dark and body.font-dys.
+const options: { key: keyof A11yPrefs; label: string }[] = [
+  { key: "contrast", label: "High contrast" },
+  { key: "dark", label: "Dark mode" },
+  { key: "dys", label: "Easier-to-read font" },
+];
+
 export default function AccessibilityPanel() {
+  const [prefs, setPrefs] = useState<A11yPrefs>({ dark: false, contrast: false, dys: false });
   const [reading, setReading] = useState(false);
+  const pathname = usePathname();
+
+  // Start from whatever the <head> script already applied.
+  useEffect(() => { setPrefs(currentPrefs()); }, []);
+
+  // Stop reading when the student moves to another page (or the panel unmounts).
+  useEffect(() => {
+    return () => { if ("speechSynthesis" in window) speechSynthesis.cancel(); setReading(false); };
+  }, [pathname]);
+
+  function update(key: keyof A11yPrefs, value: boolean) {
+    const next = { ...prefs, [key]: value };
+    setPrefs(next);
+    applyPrefs(next);
+    savePrefs(next);
+  }
 
   function readAloud() {
     const main = document.getElementById("main");
@@ -13,31 +36,29 @@ export default function AccessibilityPanel() {
     const u = new SpeechSynthesisUtterance(main.innerText);
     u.rate = 0.95;
     u.onend = () => setReading(false);
+    u.onerror = () => setReading(false);
     speechSynthesis.cancel();
     speechSynthesis.speak(u);
     setReading(true);
   }
 
-  function setAttr(name: string, value: string | null) {
-    const html = document.documentElement;
-    if (value) html.setAttribute(name, value); else html.removeAttribute(name);
-  }
-
   return (
     <div className="glass p-4 grid gap-3 w-72" role="group" aria-label="Accessibility options">
       <h2 className="font-display font-semibold">Accessibility</h2>
-      <label className="flex justify-between items-center gap-3">High contrast
-        <input type="checkbox" onChange={(e) => setAttr("data-contrast", e.target.checked ? "high" : null)} />
-      </label>
-      <label className="flex justify-between items-center gap-3">Dark mode
-        <input type="checkbox" onChange={(e) => document.documentElement.classList.toggle("dark", e.target.checked)} />
-      </label>
-      <label className="flex justify-between items-center gap-3">Easier-to-read font
-        <input type="checkbox" onChange={(e) => document.body.classList.toggle("font-dys", e.target.checked)} />
-      </label>
-      <button type="button" onClick={readAloud} className="bg-teal-tint text-teal rounded-full px-4 py-2 font-bold w-max">
+      {options.map((o) => (
+        <label key={o.key} className="flex justify-between items-center gap-3 cursor-pointer">
+          {o.label}
+          {/* The server can't know saved settings, so a brief mismatch here is expected. */}
+          <input type="checkbox" checked={prefs[o.key]} onChange={(e) => update(o.key, e.target.checked)}
+            autoComplete="off" suppressHydrationWarning
+            className="w-4 h-4 accent-[var(--rp-teal)]" />
+        </label>
+      ))}
+      <button type="button" onClick={readAloud} aria-pressed={reading}
+        className="bg-teal-tint text-teal rounded-full px-4 py-2 font-bold w-max">
         {reading ? "Stop reading" : "Read this page aloud"}
       </button>
+      <p className="text-xs text-ink-3">Your choices are saved on this device.</p>
     </div>
   );
 }

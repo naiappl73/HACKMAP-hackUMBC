@@ -7,13 +7,16 @@ export function generateStaticParams() {
   return paths.map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const path = getPath(params.slug);
+// Next.js 15: route params arrive as a Promise.
+type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props) {
+  const path = getPath((await params).slug);
   return { title: path ? `${path.role} · RetrieversPath` : "RetrieversPath" };
 }
 
-export default function PathDetail({ params }: { params: { slug: string } }) {
-  const path = getPath(params.slug);
+export default async function PathDetail({ params }: Props) {
+  const path = getPath((await params).slug);
   if (!path) notFound();
 
   return (
@@ -28,7 +31,7 @@ export default function PathDetail({ params }: { params: { slug: string } }) {
           <h1 className="font-display text-4xl sm:text-5xl font-bold">{path.role}</h1>
           <p className="text-lg text-ink-2 max-w-2xl">{path.summary}</p>
         </div>
-        <Link href={`/start?path=${path.slug}`} className="bg-gold text-ink rounded-full px-6 py-3 font-bold hover:bg-gold-soft w-max">
+        <Link href={`/start?path=${path.slug}`} className="bg-gold text-on-gold rounded-full px-6 py-3 font-bold hover:bg-gold-soft w-max">
           Start this roadmap
         </Link>
       </header>

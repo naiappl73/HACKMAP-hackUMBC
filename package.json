@@ -1,0 +1,14 @@
+{
+  "name": "hackmap-hackumbc",
+  "private": true,
+  "description": "Run the RetrieversPath app from the repo root: npm install, then npm run dev",
+  "scripts": {
+    "postinstall": "npm --prefix retrievers-path install",
+    "dev": "npm --prefix retrievers-path run dev",
+    "dev:host": "npm --prefix retrievers-path run dev:host",
+    "build": "npm --prefix retrievers-path run build",
+    "start": "npm --prefix retrievers-path run start",
+    "lint": "npm --prefix retrievers-path run lint"
+  },
+  "engines": { "node": ">=18.18" }
+}

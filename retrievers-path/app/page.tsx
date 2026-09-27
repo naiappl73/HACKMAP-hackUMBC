@@ -18,9 +18,10 @@ const features = [
 
 export default function Home() {
   return (
-    <div id="top" className="scroll-mt-24">
+    // overflow-x-clip: the hero glow bleeds past the edges but must never cause sideways scrolling.
+    <div id="top" className="scroll-mt-24 overflow-x-clip">
       {/* Hero */}
-      <section className="mx-auto max-w-6xl px-4 pt-12 pb-16 sm:pt-20 sm:pb-24 grid gap-12 lg:grid-cols-2 lg:items-center">
+      <section className="hero-glow mx-auto max-w-6xl px-4 pt-12 pb-16 sm:pt-20 sm:pb-24 grid gap-12 lg:grid-cols-2 lg:items-center">
         <div className="grid gap-6">
           <p className="w-max rounded-full bg-gold-tint text-gold-deep text-sm font-bold px-3 py-1">For UMBC Retrievers</p>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
@@ -31,7 +32,7 @@ export default function Home() {
             experiences that get you to the job you want.
           </p>
           <div className="flex flex-wrap items-center gap-3">
-            <Link href="/start" className="bg-gold text-ink rounded-full px-6 py-3 font-bold hover:bg-gold-soft">
+            <Link href="/start" className="bg-gold text-on-gold rounded-full px-6 py-3 font-bold hover:bg-gold-soft">
               Build my roadmap
             </Link>
             <a href="#how" className="rounded-full px-6 py-3 font-semibold text-teal hover:bg-teal-tint">
@@ -51,7 +52,7 @@ export default function Home() {
           <ol className="grid gap-6 md:grid-cols-3">
             {steps.map((s) => (
               <li key={s.n} className="grid gap-3 content-start">
-                <span aria-hidden="true" className="grid place-items-center w-10 h-10 rounded-full bg-gold text-ink font-display font-bold">{s.n}</span>
+                <span aria-hidden="true" className="grid place-items-center w-10 h-10 rounded-full bg-gold text-on-gold font-display font-bold">{s.n}</span>
                 <h3 className="font-display text-xl font-semibold">{s.title}</h3>
                 <p className="text-ink-2">{s.body}</p>
               </li>
@@ -93,7 +94,7 @@ export default function Home() {
             Ready to see your path?
           </h2>
           <p className="text-lg opacity-80 max-w-xl">It takes about two minutes to build your first roadmap.</p>
-          <Link href="/start" className="bg-gold text-ink rounded-full px-6 py-3 font-bold hover:bg-gold-soft">
+          <Link href="/start" className="bg-gold text-on-gold rounded-full px-6 py-3 font-bold hover:bg-gold-soft">
             Get started
           </Link>
         </div>
