@@ -1,5 +1,5 @@
-# Group name: HACKMAP -hackUMBC
-hackUMBC Group Name: HACKMAP, project with Anaiah, Martin, Paul
+# App name: RetrieversPath -hackUMBC
+hackUMBC App Name: RetrieversPath by Anaiah, Martin, and Paul.
 
 ## Frontend: RetrieversPath (Next.js 15 + React 19 + Tailwind + TypeScript)
 
